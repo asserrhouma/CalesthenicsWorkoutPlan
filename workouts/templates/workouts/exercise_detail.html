@@ -1,0 +1,89 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}{{ exercise.name }} - Calisthenics Coach{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if exercise.image %}
+            <img src="{{ exercise.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ exercise.name }}">
+        {% else %}
+            <div class="placeholder-image bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                <i class="fas fa-dumbbell fa-5x text-muted"></i>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <h1 class="mb-4">{{ exercise.name }}</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Description</h5>
+                <p class="card-text">{{ exercise.description }}</p>
+                
+                <h5 class="card-title mt-4">Difficulty Level</h5>
+                <p class="card-text">
+                    <span class="badge bg-{% if exercise.difficulty_level == 'beginner' %}success{% elif exercise.difficulty_level == 'intermediate' %}warning{% else %}danger{% endif %}">
+                        {{ exercise.difficulty_level|title }}
+                    </span>
+                </p>
+
+                {% if exercise.tips %}
+                    <h5 class="card-title mt-4">Tips</h5>
+                    <p class="card-text">{{ exercise.tips }}</p>
+                {% endif %}
+
+                {% if exercise.video_url %}
+                    <h5 class="card-title mt-4">Tutorial Video</h5>
+                    <a href="{{ exercise.video_url }}" class="btn btn-primary" target="_blank">
+                        <i class="bi bi-play-circle"></i> Watch Tutorial
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Track Your Progress</h5>
+                <p class="card-text">Keep track of your performance with this exercise.</p>
+                <a href="{% url 'progress_create' %}?exercise={{ exercise.pk }}" class="btn btn-success">
+                    Record Progress
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'exercise_list' %}" class="btn btn-outline-primary">
+                        Back to Exercises
+                    </a>
+                    {% if user.is_staff %}
+                        <a href="#" class="btn btn-outline-secondary">
+                            Edit Exercise
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if exercise.workoutplan_set.all %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Featured in Workouts</h5>
+                    <div class="list-group list-group-flush">
+                        {% for workout in exercise.workoutplan_set.all %}
+                            <a href="{% url 'workout_detail' pk=workout.pk %}" class="list-group-item list-group-item-action">
+                                {{ workout.title }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

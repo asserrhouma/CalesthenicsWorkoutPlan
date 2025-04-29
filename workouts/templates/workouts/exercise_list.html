@@ -1,0 +1,39 @@
+{% extends 'workouts/base.html' %}
+
+{% block content %}
+<form method="GET" action="" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher un exercice...">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Rechercher</button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    {% for exercise in exercises %}
+    <div class="col-md-4 mb-4">
+        <div class="card exercise-card h-100">
+            {% if exercise.image %}
+                <img src="{{ exercise.image.url }}" class="card-img-top exercise-image" alt="{{ exercise.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="placeholder-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-dumbbell fa-3x text-muted"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <a href="{{ exercise.get_absolute_url }}">
+                            <div class="card-title">
+                                <h5 class="card-text">{{ exercise.name }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

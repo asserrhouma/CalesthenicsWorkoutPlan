@@ -1,0 +1,46 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}Progress Tracking - Calisthenics Coach{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Progress Tracking</h2>
+        <a href="{% url 'progress_create' %}" class="btn btn-primary">Record New Progress</a>
+    </div>
+
+    {% if progress %}
+        <div class="row">
+            {% for entry in progress %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entry.exercise.name }}</h5>
+                            <p class="card-text">
+                                <strong>Date:</strong> {{ entry.date }}<br>
+                                {% if entry.reps %}
+                                    <strong>Reps:</strong> {{ entry.reps }}<br>
+                                {% endif %}
+                                {% if entry.hold_time %}
+                                    <strong>Hold Time:</strong> {{ entry.hold_time }} seconds<br>
+                                {% endif %}
+                                {% if entry.notes %}
+                                    <strong>Notes:</strong> {{ entry.notes }}
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'exercise_detail' pk=entry.exercise.pk %}" class="btn btn-outline-primary btn-sm">View Exercise</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">No progress entries yet!</h4>
+            <p>Start tracking your progress by recording your first exercise achievement.</p>
+            <hr>
+            <a href="{% url 'progress_create' %}" class="btn btn-success">Record Your First Progress</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

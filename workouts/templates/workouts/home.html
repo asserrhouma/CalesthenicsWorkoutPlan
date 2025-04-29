@@ -1,0 +1,132 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}Home - Calisthenics Coach{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Background Image -->
+<div class="hero-section" style="background-image: url('/media/background.avif'); height: 500px; background-size: cover; background-position: center; position: relative;">
+    <div class="hero-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12 text-center text-white">
+                    <h1 class="display-4 fw-bold">Transform Your Body With Calisthenics</h1>
+                    <p class="lead">Build strength, flexibility, and control using your own bodyweight</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Sections -->
+<div class="container mt-5">
+    <div class="row">
+        <!-- Featured Workout Plans -->
+        <div class="col-md-6 mb-4">
+            <div class="card featured-section">
+                <div class="card-header bg-gradient d-flex align-items-center">
+                    <i class="fas fa-fire-alt me-2 text-warning"></i>
+                    <h2 class="h4 mb-0">Featured Workout Plans</h2>
+                </div>
+                <div class="card-body">
+                    {% if workout_plans %}
+                        {% for plan in workout_plans %}
+                            <div class="workout-plan-card mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="workout-icon me-3">
+                                        {% if plan.difficulty_level == 'beginner' %}
+                                            <i class="fas fa-seedling fa-2x text-success"></i>
+                                        {% elif plan.difficulty_level == 'intermediate' %}
+                                            <i class="fas fa-dumbbell fa-2x text-warning"></i>
+                                        {% else %}
+                                            <i class="fas fa-fire fa-2x text-danger"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="workout-info flex-grow-1">
+                                        <h5 class="mb-1">{{ plan.title }}</h5>
+                                        <p class="mb-2 text-muted">{{ plan.description|truncatewords:20 }}</p>
+                                        <span class="badge bg-{{ plan.difficulty_level|lower }}">{{ plan.difficulty_level }}</span>
+                                    </div>
+                                    <a href="{% url 'workout_detail' pk=plan.pk %}" class="btn btn-outline-primary btn-sm">View Plan</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <a href="{% url 'workout_list' %}" class="btn btn-primary w-100 mt-3">View All Workout Plans</a>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                            <p>No workout plans available yet.</p>
+                            <a href="{% url 'workout_create' %}" class="btn btn-primary">Create First Workout Plan</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Exercises -->
+        <div class="col-md-6 mb-4">
+            <div class="card featured-section">
+                <div class="card-header bg-gradient d-flex align-items-center">
+                    <i class="fas fa-star me-2 text-warning"></i>
+                    <h2 class="h4 mb-0">Featured Exercises</h2>
+                </div>
+                <div class="card-body">
+                    {% if exercises %}
+                        <div class="row g-3">
+                            {% for exercise in exercises %}
+                                <div class="col-md-6">
+                                    <div class="exercise-card h-100">
+                                        {% if exercise.image %}
+                                            <img src="{{ exercise.image.url }}" class="card-img-top exercise-image" alt="{{ exercise.name }}" style="height: 150px; object-fit: cover;">
+                                        {% else %}
+                                            <div class="placeholder-image bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                                                <i class="fas fa-dumbbell fa-3x text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ exercise.name }}</h5>
+                                            <p class="card-text small">{{ exercise.description|truncatewords:10 }}</p>
+                                            <a href="{% url 'exercise_detail' pk=exercise.pk %}" class="btn btn-outline-primary btn-sm">Learn More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a href="{% url 'exercise_list' %}" class="btn btn-primary w-100 mt-4">View All Exercises</a>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-running fa-3x text-muted mb-3"></i>
+                            <p>No exercises available yet.</p>
+                            <a href="{% url 'exercise_create' %}" class="btn btn-primary">Add First Exercise</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="stats-card text-center">
+                <i class="fas fa-clipboard-list"></i>
+                <h3 class="display-4">{{ stats.total_workouts }}</h3>
+                <p class="text-muted">Total Workout Plans</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card text-center">
+                <i class="fas fa-dumbbell"></i>
+                <h3 class="display-4">{{ stats.total_exercises }}</h3>
+                <p class="text-muted">Available Exercises</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card text-center">
+                <i class="fas fa-users"></i>
+                <h3 class="display-4">{{ stats.total_users }}</h3>
+                <p class="text-muted">Active Users</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

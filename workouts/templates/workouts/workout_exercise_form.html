@@ -1,0 +1,42 @@
+{% extends 'workouts/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Exercise to {{ workout.title }} - Calisthenics Coach{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Add Exercise to Workout</h1>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">{{ workout.title }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Add Exercise</button>
+                        <a href="{% url 'workout_detail' pk=workout.pk %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Tips for Creating an Effective Workout</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">✓ Start with compound exercises</li>
+                    <li class="mb-2">✓ Allow adequate rest between sets</li>
+                    <li class="mb-2">✓ Progress from easier to harder exercises</li>
+                    <li class="mb-2">✓ Include variety in movement patterns</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
